@@ -39,6 +39,11 @@ def get_client():
 
 
 def _build_prompt(messages):
+    """
+    Convert the existing Ollama-style message format
+    into a single Gemini prompt.
+    """
+
     parts = []
 
     for message in messages:
@@ -53,36 +58,61 @@ def _build_prompt(messages):
 
 
 def chat(model, messages, stream=False):
+    """
+    Compatibility wrapper for ollama.chat().
+
+    Normal mode:
+        returns a dictionary.
+
+    Streaming mode:
+        returns a generator yielding dictionaries.
+    """
+
     client = get_client()
 
     prompt = _build_prompt(messages)
 
+    # --------------------------------------------------------
+    # STREAMING MODE
+    # --------------------------------------------------------
+
     if stream:
-        for chunk in client.models.generate_content_stream(
-            model=CHAT_MODEL,
-            contents=prompt,
-        ):
-            if chunk.text:
-                yield {
-                    "message": {
-                        "content": chunk.text
+
+        def generate_stream():
+            for chunk in client.models.generate_content_stream(
+                model=CHAT_MODEL,
+                contents=prompt,
+            ):
+                if chunk.text:
+                    yield {
+                        "message": {
+                            "content": chunk.text
+                        }
                     }
-                }
 
-    else:
-        response = client.models.generate_content(
-            model=CHAT_MODEL,
-            contents=prompt,
-        )
+        return generate_stream()
 
-        return {
-            "message": {
-                "content": response.text or ""
-            }
+    # --------------------------------------------------------
+    # NORMAL MODE
+    # --------------------------------------------------------
+
+    response = client.models.generate_content(
+        model=CHAT_MODEL,
+        contents=prompt,
+    )
+
+    return {
+        "message": {
+            "content": response.text or ""
         }
+    }
 
 
 def embeddings(model, prompt):
+    """
+    Compatibility wrapper for ollama.embeddings().
+    """
+
     client = get_client()
 
     response = client.models.embed_content(
@@ -99,6 +129,13 @@ def embeddings(model, prompt):
 
 
 def list():
+    """
+    Compatibility wrapper for ollama.list().
+
+    The existing application uses this to check whether
+    the configured model is available.
+    """
+
     return {
         "models": [
             {
