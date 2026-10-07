@@ -10,8 +10,8 @@ DB_PATH = PROJECT_ROOT / "chroma_db"
 COLLECTION_NAME = "my_documents"
 
 # Models (must be pulled via `ollama pull <name>`)
-DEFAULT_CHAT_MODEL = "llama3.2"
-DEFAULT_EMBED_MODEL = "nomic-embed-text"
+DEFAULT_CHAT_MODEL = "gemini-2.5-flash"
+DEFAULT_EMBED_MODEL = "gemini-embedding-001"
 
 # Retrieval & Advanced RAG Settings
 DEFAULT_N_RESULTS = 5
