@@ -1,0 +1,14 @@
+[
+  {
+    "question": "Replace this with a real question about a document you've uploaded",
+    "expected_source": "your_file_name.pdf"
+  },
+  {
+    "question": "Add a few more question/answer pairs here to build a real eval set",
+    "expected_source": "your_file_name.pdf"
+  },
+  {
+    "question": "Aim for 8-15 questions covering different parts of your documents for a meaningful report",
+    "expected_source": "your_file_name.pdf"
+  }
+]
